@@ -11,6 +11,8 @@ import Page from "../pages/Page";
 import Publiclayout from "../layout/public_layout";
 import Login from "../pages/login";
 import WithAuth from "../hoc/with-auth";
+import Cart from "../pages/Cart";
+import WatchList from "../pages/Watchlist";
 
 function AppRoutes() {
     
@@ -59,7 +61,13 @@ function AppRoutes() {
                 },{
                     path: "/login",
                     element: <Login />,
-                }
+                },{
+                    path: "/cart",
+                    element: <Cart />,
+                },{
+                    path: "/like",
+                    element: <WatchList />,
+                },
             ]
                 
         },

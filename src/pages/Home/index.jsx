@@ -23,9 +23,11 @@ import Image21 from "./../../assets/images/Rectangle 102.png";
 import { PostContext } from "../../Context/PostContext";
 import Banner from "../../component/banner";
 import { useNavigate } from "react-router-dom";
+import AddtoCart from "../../component/AddtoCart";
+import Like from "../../component/Like";
 
 function Home() {
-  const { loading, products, addToCart } = useContext(PostContext);
+  const { loading, products, addToCart, category, addToLike } = useContext(PostContext);
 
   const containerRef = useRef(null);
   const navigate = useNavigate();
@@ -38,23 +40,34 @@ function Home() {
     containerRef.current.scrollBy({ left: 300, behavior: "smooth" });
   };
 
-  const handleAddToCart = (product) => {
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-      addToCart(product);
-      alert("Added to cart!");
-    } else {
-      navigate("/login");
-    }
-  };
+  // const handleAddToCart = (product) => {
+  //   const token = localStorage.getItem("auth_token");
+  //   if (token) {
+  //     addToCart(product);
+  //     alert("Added to cart!");
+  //   } else {
+  //     navigate("/login");
+  //   }
+  // };
 
-  const itemsPerPage = 4; // Number of items per page
+  // const handleLike = (product) => {
+  //   const token = localStorage.getItem("auth_token");
+  //   if (token) {
+  //     alert("Added Like!");
+  //     addToLike(product);
+      
+  //   } else {
+  //     navigate("/login");
+  //   }
+  // };
+
+  const itemsPerPage = 4; 
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Calculate total pages
+  
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
-  // Get the products for the current page
+  
   const currentProducts = products.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -119,23 +132,19 @@ function Home() {
                   />
 
                   <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 flex items-start justify-end p-2 space-x-2 transition-all">
-                    <button className="bg-white p-1 rounded-full shadow hover:bg-gray-100">
+                    {/* <button   onClick={() => handleLike(item)} className="bg-white p-1 rounded-full shadow hover:bg-gray-100">
                       💖
-                    </button>
+                    </button> */}
+                    <Like product={item} />
                     <button className="bg-white p-1 rounded-full shadow hover:bg-gray-100">
                       🔍
                     </button>
-                    <button
-                      onClick={() => handleAddToCart(item)}
-                      className="bg-white p-1 rounded-full shadow hover:bg-gray-100"
-                    >
-                      🛒
-                    </button>
+                    <AddtoCart product={item} />
                   </div>
 
-                  <button className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-green-500 text-white text-sm px-4 py-1 rounded-full opacity-0 group-hover:opacity-100 transition">
+                  {/* <button className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-green-500 text-white text-sm px-4 py-1 rounded-full opacity-0 group-hover:opacity-100 transition">
                     View Details
-                  </button>
+                  </button> */}
                 </div>
 
                 <div className="p-4 text-center space-y-1">
