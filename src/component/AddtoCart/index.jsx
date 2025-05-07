@@ -1,15 +1,16 @@
-import React, { useContext } from 'react';
-import { PostContext } from '../../Context/PostContext';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { addToCart } from '../../ Redux/slice/cart.slice'; 
 
 function AddtoCart({ product }) {
-  const { addToCart } = useContext(PostContext);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleAddToCart = () => {
     const token = localStorage.getItem("auth_token");
     if (token) {
-      addToCart(product);
+      dispatch(addToCart(product));
       alert("Added to cart!");
     } else {
       navigate("/login");

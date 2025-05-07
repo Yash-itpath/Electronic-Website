@@ -6,16 +6,16 @@ export const PostContext = createContext();
 const PostContextProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cartItems, setCartItems] = useState([]);
+  // const [cartItems, setCartItems] = useState([]);
   const [category, setCategories] = useState([]);
   const [LikeItems, setLikeItems] = useState([]);
 
 
  
 
-  const addToCart = (product) => {
-    setCartItems((prev) => [...prev, product]);
-  };
+  // const addToCart = (product) => {
+  //   setCartItems((prev) => [...prev, product]);
+  // };
 
   const addToLike = (product) => {
     setLikeItems((prev) => [...prev, product]);
@@ -63,7 +63,7 @@ const PostContextProvider = ({ children }) => {
         products,
         loading,
         cartItems,
-        addToCart,
+        // addToCart,
         category,
         LikeItems,
         addToLike,

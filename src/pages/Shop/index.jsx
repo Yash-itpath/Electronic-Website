@@ -1,12 +1,20 @@
-import React, { useContext, useState } from "react";
-import { PostContext } from "../../Context/PostContext";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProducts } from "../../ Redux/slice/productSlice";
+import { addToCart } from "../../ Redux/slice/cart.slice";
+import { addToLike } from "../../ Redux/slice/likeSlice";
+import { useNavigate } from "react-router-dom";
 import Banner from "../../component/banner";
-import AddtoCart from "../../component/AddtoCart";
 
 function Shop() {
-  const { loading, products, category } = useContext(PostContext);
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.product.products);
+  const loading = useSelector((state) => state.product.loading);
+  const navigate = useNavigate();
 
-  console.log(category);
+  // Derive categories from products
+  const categories = [...new Set(products.map((product) => product.category))];
+
   const [perPage, setPerPage] = useState(8);
   const [sort, setSort] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,7 +22,34 @@ function Shop() {
   const [selectedDiscounts, setSelectedDiscounts] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const sortedProducts = [...products].sort((a, b) => {
+  // Fetch products on mount if not already loaded
+  useEffect(() => {
+    if (!products.length) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, products.length]);
+
+  // Mock brands (since not provided by API)
+  const getBrand = (title) => {
+    const words = title.split(" ");
+    return words[0] || "Generic"; // e.g., "Fjallraven" from "Fjallraven - Foldsack"
+  };
+
+  // Simulate discounts (since not provided by API)
+  const getDiscount = (price) => {
+    if (price > 100) return "10% off";
+    if (price > 50) return "5% off";
+    return "No discount";
+  };
+
+  // Add brand and discount to products
+  const enrichedProducts = products.map((product) => ({
+    ...product,
+    brand: getBrand(product.title),
+    discount: getDiscount(product.price),
+  }));
+
+  const sortedProducts = [...enrichedProducts].sort((a, b) => {
     if (sort === "price-low-high") return a.price - b.price;
     if (sort === "price-high-low") return b.price - a.price;
     if (sort === "title-a-z") return a.title.localeCompare(b.title);
@@ -65,29 +100,58 @@ function Shop() {
     setCurrentPage(1);
   };
 
+  const handleAddToCart = (product) => {
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      dispatch(addToCart(product));
+      alert("Added to cart!");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const handleLike = (product) => {
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      dispatch(addToLike(product));
+      alert("Added Like!");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  // Helper to render star rating
+  const renderStars = (rate) => {
+    const stars = Math.round(rate);
+    return "★".repeat(stars) + "☆".repeat(5 - stars);
+  };
+
   return (
     <>
       <div className="container mx-auto px-4 py-10 flex flex-col md:flex-row gap-6">
         <div className="w-full md:w-1/4">
           {/* Brand Filter */}
-          <div className="mb-6 ">
+          <div className="mb-6">
             <h3 className="text-lg font-bold text-blue-800 mb-2 border-b">
               Product Brand
             </h3>
             <div className="grid grid-cols-2">
-            {[...new Set(products.map((product) => product.brand))].map(
-              (brand) => (
-                <label key={brand} className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedBrands.includes(brand)}
-                    onChange={() => handleBrandChange(brand)}
-                    className="mr-2"
-                  />
-                  <span className="text-gray-700 cursor-pointer hover:underline">{brand}</span>
-                </label>
-              )
-            )}</div>
+              {[...new Set(enrichedProducts.map((product) => product.brand))].map(
+                (brand) => (
+                  <label key={brand} className="flex items-center mb-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedBrands.includes(brand)}
+                      onChange={() => handleBrandChange(brand)}
+                      className="mr-2"
+                    />
+                    <span className="text-gray-700 cursor-pointer hover:underline">
+                      {brand}
+                    </span>
+                  </label>
+                )
+              )}
+            </div>
           </div>
 
           {/* Discount Filter */}
@@ -95,10 +159,10 @@ function Shop() {
             <h3 className="text-lg font-bold text-blue-800 mb-2 border-b">
               Discount Offer
             </h3>
-
             <div className="grid grid-cols-2">
-            {[...new Set(products.map((product) => product.discount))].map(
-              (discount) => (
+              {[
+                ...new Set(enrichedProducts.map((product) => product.discount)),
+              ].map((discount) => (
                 <label key={discount} className="flex items-center mb-2">
                   <input
                     type="checkbox"
@@ -106,10 +170,12 @@ function Shop() {
                     onChange={() => handleDiscountChange(discount)}
                     className="mr-2"
                   />
-                  <span className="text-gray-700 cursor-pointer hover:underline">{discount}</span>
+                  <span className="text-gray-700 cursor-pointer hover:underline">
+                    {discount}
+                  </span>
                 </label>
-              )
-            )}</div>
+              ))}
+            </div>
           </div>
 
           {/* Category Filter */}
@@ -118,7 +184,7 @@ function Shop() {
               Categories
             </h3>
             <div className="grid grid-cols-2">
-              {category.map((categoryItem) => (
+              {categories.map((categoryItem) => (
                 <label key={categoryItem} className="flex items-center mb-2">
                   <input
                     type="checkbox"
@@ -126,10 +192,12 @@ function Shop() {
                     onChange={() => handleCategoryChange(categoryItem)}
                     className="mr-2"
                   />
-                  <span className="text-gray-700 cursor-pointer hover:underline">{categoryItem}</span>
+                  <span className="text-gray-700 cursor-pointer hover:underline">
+                    {categoryItem}
+                  </span>
                 </label>
               ))}
-              </div>
+            </div>
           </div>
         </div>
 
@@ -140,7 +208,7 @@ function Shop() {
               Ecommerce Accessories & Items
             </h2>
 
-            <div className="flex gap-4 ">
+            <div className="flex gap-4">
               <div>
                 <label className="text-sm font-medium text-gray-700 mr-2">
                   Per Page:
@@ -183,6 +251,8 @@ function Shop() {
 
           {loading ? (
             <div className="text-center py-10">Loading...</div>
+          ) : paginatedProducts.length === 0 ? (
+            <div className="text-center py-10">No products found</div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-8">
               {paginatedProducts.map((item) => (
@@ -202,19 +272,38 @@ function Shop() {
                       ${item.price}
                     </span>
                     <span className="text-gray-500 line-through ml-2">
-                      ${item.originalPrice || (item.price * 1.2).toFixed(2)}
+                      ${(item.price * 1.2).toFixed(2)}
                     </span>
                   </div>
                   <div className="flex items-center mb-2">
-                    <span className="text-yellow-400">★★★★★</span>
-                    <span className="ml-2 text-gray-600">(4.5)</span>
+                    {item.rating ? (
+                      <>
+                        <span className="text-yellow-400">
+                          {renderStars(item.rating.rate)}
+                        </span>
+                        <span className="ml-2 text-gray-600">
+                          ({item.rating.rate.toFixed(1)}, {item.rating.count}{" "}
+                          reviews)
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-gray-600">No ratings</span>
+                    )}
                   </div>
                   <p className="text-gray-600 text-sm line-clamp-2">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   </p>
                   <div className="flex justify-between mt-3">
-                    <AddtoCart product={item} />
-                    <button className="text-gray-500 hover:text-gray-700">
+                    <button
+                      onClick={() => handleAddToCart(item)}
+                      className="text-gray-500 hover:text-gray-700"
+                    >
+                      🛒
+                    </button>
+                    <button
+                      onClick={() => handleLike(item)}
+                      className="text-gray-500 hover:text-gray-700"
+                    >
                       ❤️
                     </button>
                     <button className="text-gray-500 hover:text-gray-700">
