@@ -23,6 +23,8 @@ import { addToLike } from "../../ Redux/slice/likeSlice";
 import { fetchProducts } from "../../ Redux/slice/productSlice";
 import { useNavigate } from "react-router-dom";
 import Banner from "../../component/banner";
+import AddtoCart from "../../component/AddtoCart";
+import Like from "../../component/Like";
 
 function Home() {
   const dispatch = useDispatch();
@@ -97,7 +99,7 @@ function Home() {
 
       <div className="mt-14" style={{ color: "#1A0B5B" }}>
         <div className="flex justify-center">
-          <p className="font-josefin text-xl font-bold">Featured Products</p>
+          <p className="font-josefin text-3xl font-bold">Featured Products</p>
         </div>
       </div>
 
@@ -136,21 +138,11 @@ function Home() {
                     />
 
                     <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 flex items-start justify-end p-2 space-x-2 transition-all">
-                      <button
-                        onClick={() => handleLike(item)}
-                        className="bg-white p-1 rounded-full shadow hover:bg-gray-100"
-                      >
-                        💖
-                      </button>
+                     <Like product={item} />
                       <button className="bg-white p-1 rounded-full shadow hover:bg-gray-100">
                         🔍
                       </button>
-                      <button
-                        onClick={() => handleAddToCart(item)}
-                        className="bg-white p-1 rounded-full shadow hover:bg-gray-100"
-                      >
-                        🛒
-                      </button>
+                      <AddtoCart  product={item} />
                     </div>
                   </div>
 
@@ -627,7 +619,7 @@ function Home() {
 
       {/* Latest Blog */}
       <div className="container mx-auto px-4 pt-20 pb-24">
-        <h2 className="text-center text-5xl font-bold text-[#1A0B5B] font-josefin">
+        <h2 className="text-center text-3xl font-bold text-[#1A0B5B] font-josefin">
           Latest Blog
         </h2>
 

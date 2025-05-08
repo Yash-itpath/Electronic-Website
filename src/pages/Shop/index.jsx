@@ -5,6 +5,8 @@ import { addToCart } from "../../ Redux/slice/cart.slice";
 import { addToLike } from "../../ Redux/slice/likeSlice";
 import { useNavigate } from "react-router-dom";
 import Banner from "../../component/banner";
+import AddtoCart from "../../component/AddtoCart";
+import Like from "../../component/Like";
 
 function Shop() {
   const dispatch = useDispatch();
@@ -294,18 +296,8 @@ function Shop() {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   </p>
                   <div className="flex justify-between mt-3">
-                    <button
-                      onClick={() => handleAddToCart(item)}
-                      className="text-gray-500 hover:text-gray-700"
-                    >
-                      🛒
-                    </button>
-                    <button
-                      onClick={() => handleLike(item)}
-                      className="text-gray-500 hover:text-gray-700"
-                    >
-                      ❤️
-                    </button>
+                    <AddtoCart product={item} />
+                    <Like product={item} />
                     <button className="text-gray-500 hover:text-gray-700">
                       👁️
                     </button>

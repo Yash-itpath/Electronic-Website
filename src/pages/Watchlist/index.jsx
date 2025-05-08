@@ -19,7 +19,7 @@ function WatchList() {
     if (token) {
       dispatch(addToCart(item));
       alert('Added to cart!');
-      navigate('/cart');
+      navigate('/ncart');
     } else {
       navigate('/login');
     }
@@ -27,7 +27,8 @@ function WatchList() {
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Your WatchList</h1>
+      <h1 className="text-3xl font-bold mb-4 text-center">Your WatchList</h1>
+
       {LikeItems.length === 0 ? (
         <p>No items in watchlist.</p>
       ) : (

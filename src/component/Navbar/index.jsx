@@ -12,7 +12,7 @@ function Navbar() {
             { name: "Home", path: "/" },
             { name: "Product", path: "/product" },
             { name: "Shop", path: "/shop" },
-            { name: "Cart", path: "/cart" },
+            { name: "Cart", path: "/ncart" },
             { name: "Contact", path: "/contact" },
           ].map((link) => (
             <NavLink

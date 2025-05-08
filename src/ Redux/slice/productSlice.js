@@ -1,7 +1,6 @@
-// src/features/product/productSlice.js
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api';
-// import api from '../../api';
 
 export const fetchProducts = createAsyncThunk('product/fetchProducts', async () => {
   const response = await api.get('/products');
@@ -25,7 +24,7 @@ const productSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Products
+ 
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
       })
@@ -38,7 +37,7 @@ const productSlice = createSlice({
         state.loading = false;
       })
 
-      // Categories
+      
       .addCase(fetchCategories.pending, (state) => {
         state.loading = true;
       })

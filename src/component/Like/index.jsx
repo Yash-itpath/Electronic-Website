@@ -1,21 +1,22 @@
-import React, { useContext } from "react";
-import { PostContext } from "../../Context/PostContext";
+import React from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { addToLike } from "../../ Redux/slice/likeSlice";
 
 function Like({ product }) {
-  const { loading, products, addToCart, category, addToLike } =
-    useContext(PostContext);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLike = () => {
     const token = localStorage.getItem("auth_token");
     if (token) {
+      dispatch(addToLike(product));
       alert("Added Like!");
-      addToLike(product);
     } else {
       navigate("/login");
     }
   };
+
   return (
     <button
       onClick={handleLike}
