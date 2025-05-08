@@ -19,7 +19,7 @@ import Image20 from "./../../assets/images/Group 154.png";
 import Image21 from "./../../assets/images/Rectangle 102.png";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../../ Redux/slice/cart.slice";
-import { addToLike } from "../../ Redux/slice/likeSlice";
+// import { addToLike } from "../../ Redux/slice/likeSlice";
 import { fetchProducts } from "../../ Redux/slice/productSlice";
 import { useNavigate } from "react-router-dom";
 import Banner from "../../component/banner";
@@ -59,15 +59,15 @@ function Home() {
     }
   };
 
-  const handleLike = (product) => {
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-      dispatch(addToLike(product));
-      alert("Added Like!");
-    } else {
-      navigate("/login");
-    }
-  };
+  // const handleLike = (product) => {
+  //   const token = localStorage.getItem("auth_token");
+  //   if (token) {
+  //     dispatch(addToLike(product));
+  //     alert("Added Like!");
+  //   } else {
+  //     navigate("/login");
+  //   }
+  // };
 
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
@@ -204,12 +204,7 @@ function Home() {
                       ${Math.round(product.price * 1.3)}
                     </p>
                   </div>
-                  <button
-                    onClick={() => handleAddToCart(product)}
-                    className="bg-white p-1 rounded-full shadow hover:bg-gray-100 cursor-pointer"
-                  >
-                    🛒
-                  </button>
+                  <AddtoCart  product={item} />
                 </div>
                 {product.rating && (
                   <p className="text-gray-600 text-sm mt-2">

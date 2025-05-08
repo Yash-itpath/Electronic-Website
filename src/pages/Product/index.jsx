@@ -1,20 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../ Redux/slice/productSlice";
-import { addToCart } from "../../ Redux/slice/cart.slice";
-import { addToLike } from "../../ Redux/slice/likeSlice";
-import { useNavigate } from "react-router-dom";
+// import { addToCart } from "../../ Redux/slice/cart.slice";
+// import { addToLike } from "../../ Redux/slice/likeSlice";
+
 import Banner from "../../component/banner";
 import AddtoCart from "../../component/AddtoCart";
 import Like from "../../component/Like";
+import Modal from "../../component/Modal";
 
 function Product() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
   const loading = useSelector((state) => state.product.loading);
-  const navigate = useNavigate();
 
-  // Fetch products on mount if not already loaded
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     if (!products.length) {
       dispatch(fetchProducts());
@@ -31,15 +33,15 @@ function Product() {
   //   }
   // };
 
-  const handleLike = (product) => {
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-      dispatch(addToLike(product));
-      alert("Added Like!");
-    } else {
-      navigate("/login");
-    }
-  };
+  // const handleLike = (product) => {
+  //   const token = localStorage.getItem("auth_token");
+  //   if (token) {
+  //     dispatch(addToLike(product));
+  //     alert("Added Like!");
+  //   } else {
+  //     navigate("/login");
+  //   }
+  // };
 
   // Helper to render star rating
   const renderStars = (rate) => {
@@ -56,34 +58,34 @@ function Product() {
           <div className="text-center py-10">No products found</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((item) => (
-              <div key={item.id} className="bg-white p-4 rounded shadow">
+            {products.map((items) => (
+              <div key={items.id} className="bg-white p-4 rounded shadow">
                 <div className="h-48 flex justify-center items-center mb-4">
                   <img
-                    src={item.image}
-                    alt={item.title}
+                    src={items.image}
+                    alt={items.title}
                     className="object-contain max-w-full max-h-full"
                   />
                 </div>
                 <h3 className="text-lg font-semibold line-clamp-1">
-                  {item.title}
+                  {items.title}
                 </h3>
                 <div className="flex items-center my-2">
                   <span className="text-gray-700 font-semibold">
-                    ${item.price}
+                    ${items.price}
                   </span>
                   <span className="text-gray-500 line-through ml-2">
-                    ${(item.price * 1.2).toFixed(2)}
+                    ${(items.price * 1.2).toFixed(2)}
                   </span>
                 </div>
                 <div className="flex items-center mb-2">
-                  {item.rating ? (
+                  {items.rating ? (
                     <>
                       <span className="text-yellow-400">
                         {renderStars(item.rating.rate)}
                       </span>
                       <span className="ml-2 text-gray-600">
-                        ({item.rating.rate.toFixed(1)}, {item.rating.count}{" "}
+                        ({items.rating.rate.toFixed(1)}, {items.rating.count}{" "}
                         reviews)
                       </span>
                     </>
@@ -95,9 +97,15 @@ function Product() {
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 </p>
                 <div className="flex justify-between mt-3">
-                  <AddtoCart product={item} />
-                  <Like product={item} />
-                  <button className="text-gray-500 hover:text-gray-700">
+                  <AddtoCart product={items} />
+                  <Like product={items} />
+                  <button
+                    className="text-gray-500 hover:text-gray-700"
+                    onClick={() => {
+                      setSelectedProduct(items);
+                      setIsModalOpen(true);
+                    }}
+                  >
                     👁️
                   </button>
                 </div>
@@ -108,6 +116,11 @@ function Product() {
       </div>
 
       <Banner />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        data={selectedProduct}
+      />
     </>
   );
 }
