@@ -9,16 +9,16 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 const Heading = () => {
   const [token, setToken] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation(); // detect route changes
+  const location = useLocation(); 
 
   useEffect(() => {
     const storedToken = localStorage.getItem("auth_token");
     setToken(storedToken);
-  }, [location]); // re-check token on every route change
+  }, [location]); 
 
   const handleLogout = () => {
     localStorage.removeItem("auth_token");
-    setToken(null); // update local state
+    setToken(null); 
     navigate("/login");
   };
 

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../ Redux/slice/productSlice";
-// import { addToCart } from "../../ Redux/slice/cart.slice";
-// import { addToLike } from "../../ Redux/slice/likeSlice";
+ 
 
 import Banner from "../../component/banner";
 import AddtoCart from "../../component/AddtoCart";
@@ -23,27 +22,7 @@ function Product() {
     }
   }, [dispatch, products.length]);
 
-  // const handleAddToCart = (product) => {
-  //   const token = localStorage.getItem("auth_token");
-  //   if (token) {
-  //     dispatch(addToCart(product));
-  //     alert("Added to cart!");
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // };
-
-  // const handleLike = (product) => {
-  //   const token = localStorage.getItem("auth_token");
-  //   if (token) {
-  //     dispatch(addToLike(product));
-  //     alert("Added Like!");
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // };
-
-  // Helper to render star rating
+   
   const renderStars = (rate) => {
     const stars = Math.round(rate);
     return "★".repeat(stars) + "☆".repeat(5 - stars);

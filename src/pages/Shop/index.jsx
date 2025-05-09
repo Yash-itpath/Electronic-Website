@@ -14,7 +14,7 @@ function Shop() {
   const loading = useSelector((state) => state.product.loading);
   const navigate = useNavigate();
 
-  // Derive categories from products
+ 
   const categories = [...new Set(products.map((product) => product.category))];
 
   const [perPage, setPerPage] = useState(8);
@@ -24,27 +24,26 @@ function Shop() {
   const [selectedDiscounts, setSelectedDiscounts] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  // Fetch products on mount if not already loaded
+  
   useEffect(() => {
     if (!products.length) {
       dispatch(fetchProducts());
     }
   }, [dispatch, products.length]);
 
-  // Mock brands (since not provided by API)
+ 
   const getBrand = (title) => {
     const words = title.split(" ");
-    return words[0] || "Generic"; // e.g., "Fjallraven" from "Fjallraven - Foldsack"
+    return words[0] || "Generic";  
   };
-
-  // Simulate discounts (since not provided by API)
+ 
   const getDiscount = (price) => {
     if (price > 100) return "10% off";
     if (price > 50) return "5% off";
     return "No discount";
   };
 
-  // Add brand and discount to products
+  
   const enrichedProducts = products.map((product) => ({
     ...product,
     brand: getBrand(product.title),

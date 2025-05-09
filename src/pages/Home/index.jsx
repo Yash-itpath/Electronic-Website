@@ -18,8 +18,7 @@ import Image19 from "./../../assets/images/image 30.png";
 import Image20 from "./../../assets/images/Group 154.png";
 import Image21 from "./../../assets/images/Rectangle 102.png";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart } from "../../ Redux/slice/cart.slice";
-// import { addToLike } from "../../ Redux/slice/likeSlice";
+
 import { fetchProducts } from "../../ Redux/slice/productSlice";
 import { useNavigate } from "react-router-dom";
 import Banner from "../../component/banner";
@@ -34,7 +33,7 @@ function Home() {
 
   const containerRef = useRef(null);
 
-  // Fetch products on component mount
+
   useEffect(() => {
     if (!products.length) {
       dispatch(fetchProducts());
@@ -59,15 +58,6 @@ function Home() {
     }
   };
 
-  // const handleLike = (product) => {
-  //   const token = localStorage.getItem("auth_token");
-  //   if (token) {
-  //     dispatch(addToLike(product));
-  //     alert("Added Like!");
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // };
 
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
@@ -204,7 +194,7 @@ function Home() {
                       ${Math.round(product.price * 1.3)}
                     </p>
                   </div>
-                  <AddtoCart  product={item} />
+                  <AddtoCart  product={product} />
                 </div>
                 {product.rating && (
                   <p className="text-gray-600 text-sm mt-2">

@@ -13,6 +13,7 @@ import NFound from "../pages/NotFound";
 import Publiclayout from "../layout/public_layout";
 import WithAuth from "../hoc/with-auth";
 import Ncart from "../pages/Ncart";
+import Order from "../pages/Ordered";
 
 function AppRoutes() {
   const router = createBrowserRouter([
@@ -28,8 +29,9 @@ function AppRoutes() {
         { path: "/cart", element: <Cart /> },
         { path: "/like", element: <WatchList /> },
         { path: "/ncart", element: <Ncart /> },
+        { path: "/order", element: <Order /> },
 
-        // 👇 Catch-all 404 route
+      
         { path: "*", element: <NFound /> }
       ]
     }

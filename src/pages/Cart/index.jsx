@@ -1,19 +1,23 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart } from '../../ Redux/slice/cart.slice'; // ✅ Make sure path is correct
+import { removeFromCart } from '../../ Redux/slice/cart.slice'; 
+import { useNavigate } from 'react-router-dom'; 
 
 function Cart() {
   const cartItems = useSelector(state => state.cart.cartItems);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate(); 
   const handleRemoveFromCart = (item) => {
     dispatch(removeFromCart(item.id));
   };
 
   const handleBuy = (item) => {
-    alert(`Buying ${item.title} for $${item.price}`);
-    // You can redirect or integrate payment here
-  };
+      if (window.confirm(`Confirm purchase of ${item.title} for $${item.price}?`)) {
+        alert(`Successfully purchased ${item.title} for $${item.price}!`);
+        dispatch(removeFromCart(item.id)); 
+        navigate('/order'); 
+      }
+    };
 
   return (
     <div className="p-4">
@@ -43,6 +47,7 @@ function Cart() {
                     Remove
                   </button>
                   <button
+                    type="button"
                     className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
                     onClick={() => handleBuy(item)}
                   >

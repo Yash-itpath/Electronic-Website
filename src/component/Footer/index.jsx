@@ -7,7 +7,7 @@ function Footer() {
   return (
     <footer className="bg-[#F6F5FF] text-[#8A8FB9] pt-12 pb-6 ">
       <div className="container mx-auto grid  grid-cols-4 gap-16 px-4">
-        {/* Column 1 - Hekto */}
+    
         <div>
           <h2 className="text-[#000] font-bold text-2xl mb-4">Hekto</h2>
           <div className="flex flex-col sm:flex-row mb-4">
@@ -26,7 +26,6 @@ function Footer() {
           </p>
         </div>
 
-        {/* Column 2 - Categories */}
         <div>
           <h3 className="text-[#000] font-semibold mb-4">Categories</h3>
           <ul className="space-y-2 text-sm">
@@ -38,7 +37,7 @@ function Footer() {
           </ul>
         </div>
 
-        {/* Column 3 - Customer Care */}
+       
         <div>
           <h3 className="text-[#000] font-semibold mb-4">Customer Care</h3>
           <ul className="space-y-2 text-sm">
@@ -50,7 +49,6 @@ function Footer() {
           </ul>
         </div>
 
-        {/* Column 4 - Pages */}
         <div>
           <h3 className="text-[#000] font-semibold mb-4">Pages</h3>
           <ul className="space-y-2 text-sm">
@@ -63,8 +61,7 @@ function Footer() {
           </ul>
         </div>
       </div>
-
-      {/* Bottom Line */}
+      
       <div className="mt-10 text-center text-sm text-[#8A8FB9] border-t pt-4 flex flex-col md:flex-row items-center justify-around px-4 gap-y-4">
         <p>©Webecy - All Rights Reserved</p>
         <div className="flex gap-4">

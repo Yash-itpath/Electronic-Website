@@ -1,23 +1,12 @@
-// import React from 'react'
-// import Cart from '../Cart';
-
-// function Ncart() {
-//   return (
-//     <>
-       
-//        <Cart />
-//     </>
-//   )
-// }
-
-// export default Ncart
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, clearCart } from '../../ Redux/slice/cart.slice';
+import { useNavigate } from 'react-router-dom';
 
-function Cart() {
+function Ncart() {
   const cartItems = useSelector(state => state.cart.cartItems);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleRemoveFromCart = (item) => {
     if (window.confirm(`Remove ${item.title} from cart?`)) {
@@ -26,8 +15,11 @@ function Cart() {
   };
 
   const handleBuy = (item) => {
-    alert(`Buying ${item.title} for $${item.price}`);
-    // Replace with payment logic or redirect
+    if (window.confirm(`Confirm purchase of ${item.title} for $${item.price}?`)) {
+      alert(`Successfully purchased ${item.title} for $${item.price}!`);
+      dispatch(removeFromCart(item.id)); 
+      navigate('/order'); 
+    }
   };
 
   const handleClearCart = () => {
@@ -39,13 +31,15 @@ function Cart() {
   const handleBuyAll = () => {
     if (cartItems.length === 0) {
       alert("Your cart is empty!");
+      navigate('/order');
       return;
     }
 
     const total = cartItems.reduce((sum, item) => sum + item.price, 0).toFixed(2);
     if (window.confirm(`Confirm purchase of all ${cartItems.length} items for $${total}?`)) {
       alert(`Successfully purchased all items for $${total}!`);
-      dispatch(clearCart()); // Optional: clear cart after buying
+      dispatch(clearCart()); 
+      navigate('/order'); 
     }
   };
 
@@ -54,8 +48,7 @@ function Cart() {
 
   return (
     <div className="p-4">
-<h1 className="text-3xl font-bold mb-4 text-center underline">🛒 Your Cart</h1>
-
+      <h1 className="text-3xl font-bold mb-4 text-center underline">🛒 Your Cart</h1>
 
       {totalItems > 0 && (
         <div className="mb-6 px-16 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -65,12 +58,14 @@ function Cart() {
           </div>
           <div className="flex gap-2">
             <button
+              type="button"
               className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700"
               onClick={handleBuyAll}
             >
               Buy All
             </button>
             <button
+              type="button"
               className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600"
               onClick={handleClearCart}
             >
@@ -99,12 +94,14 @@ function Cart() {
                 <p className="mt-2 text-lg font-bold text-gray-900">${item.price}</p>
                 <div className="flex justify-between items-center mt-4">
                   <button
+                    type="button"
                     className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                     onClick={() => handleRemoveFromCart(item)}
                   >
                     Remove
                   </button>
                   <button
+                    type="button"
                     className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
                     onClick={() => handleBuy(item)}
                   >
@@ -120,4 +117,4 @@ function Cart() {
   );
 }
 
-export default Cart;
+export default Ncart;
