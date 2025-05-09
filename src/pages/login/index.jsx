@@ -38,22 +38,22 @@ function Login() {
         setError('');
         navigate('/');
       })
-      .catch((error) => {
+      .catch(() => {
         setError('Invalid email or password.');
         setSuccess('');
       });
   };
 
   const inputClass =
-    'w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500';
+    'w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base';
   const buttonClass =
-    'w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 transition';
+    'w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 transition text-sm sm:text-base';
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
-      <div className="bg-white p-8 rounded-md shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
-        <p className="text-center text-gray-500 mb-6">Login using your credentials.</p>
+      <div className="bg-white p-6 sm:p-8 rounded-md shadow-md w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-sm max-w-[90%]">
+        <h2 className="text-xl sm:text-2xl font-bold text-center mb-4">Login</h2>
+        <p className="text-center text-gray-500 mb-6 text-sm sm:text-base">Login using your credentials.</p>
 
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         {success && <p className="text-green-500 text-sm mb-4">{success}</p>}

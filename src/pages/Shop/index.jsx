@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../ Redux/slice/productSlice";
-import { addToCart } from "../../ Redux/slice/cart.slice";
-import { addToLike } from "../../ Redux/slice/likeSlice";
+
+
 import { useNavigate } from "react-router-dom";
 import Banner from "../../component/banner";
 import AddtoCart from "../../component/AddtoCart";
@@ -14,7 +14,6 @@ function Shop() {
   const loading = useSelector((state) => state.product.loading);
   const navigate = useNavigate();
 
- 
   const categories = [...new Set(products.map((product) => product.category))];
 
   const [perPage, setPerPage] = useState(8);
@@ -24,26 +23,23 @@ function Shop() {
   const [selectedDiscounts, setSelectedDiscounts] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  
   useEffect(() => {
     if (!products.length) {
       dispatch(fetchProducts());
     }
   }, [dispatch, products.length]);
 
- 
   const getBrand = (title) => {
     const words = title.split(" ");
-    return words[0] || "Generic";  
+    return words[0] || "Generic";
   };
- 
+
   const getDiscount = (price) => {
     if (price > 100) return "10% off";
     if (price > 50) return "5% off";
     return "No discount";
   };
 
-  
   const enrichedProducts = products.map((product) => ({
     ...product,
     brand: getBrand(product.title),
@@ -101,27 +97,6 @@ function Shop() {
     setCurrentPage(1);
   };
 
-  const handleAddToCart = (product) => {
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-      dispatch(addToCart(product));
-      alert("Added to cart!");
-    } else {
-      navigate("/login");
-    }
-  };
-
-  const handleLike = (product) => {
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-      dispatch(addToLike(product));
-      alert("Added Like!");
-    } else {
-      navigate("/login");
-    }
-  };
-
-  // Helper to render star rating
   const renderStars = (rate) => {
     const stars = Math.round(rate);
     return "★".repeat(stars) + "☆".repeat(5 - stars);
@@ -130,40 +105,31 @@ function Shop() {
   return (
     <>
       <div className="container mx-auto px-4 py-10 flex flex-col md:flex-row gap-6">
+        {/* Sidebar Filters */}
         <div className="w-full md:w-1/4">
           {/* Brand Filter */}
           <div className="mb-6">
-            <h3 className="text-lg font-bold text-blue-800 mb-2 border-b">
-              Product Brand
-            </h3>
+            <h3 className="text-lg font-bold text-blue-800 mb-2 border-b">Product Brand</h3>
             <div className="grid grid-cols-2">
-              {[...new Set(enrichedProducts.map((product) => product.brand))].map(
-                (brand) => (
-                  <label key={brand} className="flex items-center mb-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedBrands.includes(brand)}
-                      onChange={() => handleBrandChange(brand)}
-                      className="mr-2"
-                    />
-                    <span className="text-gray-700 cursor-pointer hover:underline">
-                      {brand}
-                    </span>
-                  </label>
-                )
-              )}
+              {[...new Set(enrichedProducts.map((p) => p.brand))].map((brand) => (
+                <label key={brand} className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    checked={selectedBrands.includes(brand)}
+                    onChange={() => handleBrandChange(brand)}
+                    className="mr-2"
+                  />
+                  <span className="text-gray-700 hover:underline cursor-pointer">{brand}</span>
+                </label>
+              ))}
             </div>
           </div>
 
           {/* Discount Filter */}
           <div className="mb-6">
-            <h3 className="text-lg font-bold text-blue-800 mb-2 border-b">
-              Discount Offer
-            </h3>
+            <h3 className="text-lg font-bold text-blue-800 mb-2 border-b">Discount Offer</h3>
             <div className="grid grid-cols-2">
-              {[
-                ...new Set(enrichedProducts.map((product) => product.discount)),
-              ].map((discount) => (
+              {[...new Set(enrichedProducts.map((p) => p.discount))].map((discount) => (
                 <label key={discount} className="flex items-center mb-2">
                   <input
                     type="checkbox"
@@ -171,9 +137,7 @@ function Shop() {
                     onChange={() => handleDiscountChange(discount)}
                     className="mr-2"
                   />
-                  <span className="text-gray-700 cursor-pointer hover:underline">
-                    {discount}
-                  </span>
+                  <span className="text-gray-700 hover:underline cursor-pointer">{discount}</span>
                 </label>
               ))}
             </div>
@@ -181,39 +145,32 @@ function Shop() {
 
           {/* Category Filter */}
           <div className="mb-6">
-            <h3 className="text-lg font-bold text-blue-800 mb-2 border-b">
-              Categories
-            </h3>
+            <h3 className="text-lg font-bold text-blue-800 mb-2 border-b">Categories</h3>
             <div className="grid grid-cols-2">
-              {categories.map((categoryItem) => (
-                <label key={categoryItem} className="flex items-center mb-2">
+              {categories.map((category) => (
+                <label key={category} className="flex items-center mb-2">
                   <input
                     type="checkbox"
-                    checked={selectedCategories.includes(categoryItem)}
-                    onChange={() => handleCategoryChange(categoryItem)}
+                    checked={selectedCategories.includes(category)}
+                    onChange={() => handleCategoryChange(category)}
                     className="mr-2"
                   />
-                  <span className="text-gray-700 cursor-pointer hover:underline">
-                    {categoryItem}
-                  </span>
+                  <span className="text-gray-700 hover:underline cursor-pointer">{category}</span>
                 </label>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Product Grid */}
+        {/* Products Grid */}
         <div className="w-full md:w-3/4">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-            <h2 className="text-2xl font-bold text-gray-800">
-              Ecommerce Accessories & Items
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-800">Ecommerce Accessories & Items</h2>
 
+            {/* Controls */}
             <div className="flex gap-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 mr-2">
-                  Per Page:
-                </label>
+                <label className="text-sm font-medium text-gray-700 mr-2">Per Page:</label>
                 <select
                   value={perPage}
                   onChange={(e) => {
@@ -229,9 +186,7 @@ function Shop() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700 mr-2">
-                  Sort By:
-                </label>
+                <label className="text-sm font-medium text-gray-700 mr-2">Sort By:</label>
                 <select
                   value={sort}
                   onChange={(e) => {
@@ -250,6 +205,7 @@ function Shop() {
             </div>
           </div>
 
+          {/* Product List */}
           {loading ? (
             <div className="text-center py-10">Loading...</div>
           ) : paginatedProducts.length === 0 ? (
@@ -265,13 +221,9 @@ function Shop() {
                       className="object-contain max-w-full max-h-full"
                     />
                   </div>
-                  <h3 className="text-lg font-semibold line-clamp-1">
-                    {item.title}
-                  </h3>
+                  <h3 className="text-lg font-semibold line-clamp-1">{item.title}</h3>
                   <div className="flex items-center my-2">
-                    <span className="text-gray-700 font-semibold">
-                      ${item.price}
-                    </span>
+                    <span className="text-gray-700 font-semibold">${item.price}</span>
                     <span className="text-gray-500 line-through ml-2">
                       ${(item.price * 1.2).toFixed(2)}
                     </span>
@@ -279,12 +231,9 @@ function Shop() {
                   <div className="flex items-center mb-2">
                     {item.rating ? (
                       <>
-                        <span className="text-yellow-400">
-                          {renderStars(item.rating.rate)}
-                        </span>
+                        <span className="text-yellow-400">{renderStars(item.rating.rate)}</span>
                         <span className="ml-2 text-gray-600">
-                          ({item.rating.rate.toFixed(1)}, {item.rating.count}{" "}
-                          reviews)
+                          ({item.rating.rate.toFixed(1)}, {item.rating.count} reviews)
                         </span>
                       </>
                     ) : (
@@ -297,9 +246,7 @@ function Shop() {
                   <div className="flex justify-between mt-3">
                     <AddtoCart product={item} />
                     <Like product={item} />
-                    <button className="text-gray-500 hover:text-gray-700">
-                      👁️
-                    </button>
+                    <button className="text-gray-500 hover:text-gray-700">👁️</button>
                   </div>
                 </div>
               ))}
